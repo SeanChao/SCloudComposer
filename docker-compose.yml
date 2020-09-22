@@ -1,0 +1,23 @@
+version: "3"
+services:
+  caddy:
+    restart: on-failure
+    image: "caddy"
+    volumes:
+      - "./caddy/Caddyfile:/etc/caddy/Caddyfile"
+    network_mode: host
+    ports:
+      - 80:80
+
+  trojan-go:
+    restart: on-failure
+    image: p4gefau1t/trojan-go
+    depends_on:
+      - caddy
+    network_mode: host
+    ports:
+      - 443:443
+    volumes:
+      - "./trojan-go:/etc/trojan-go/"
+      - "./trojan-crt:/etc/trojan-go-crt/"
+      - "./tmp:/var/log/trojan"

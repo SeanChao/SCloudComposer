@@ -1,0 +1,30 @@
+{
+    "run_type": "server",
+    "local_addr": "0.0.0.0",
+    "local_port": 443,
+    "remote_addr": "127.0.0.1",
+    "remote_port": 80,
+    "password": [
+        "some_complicated_password"
+    ],
+    "buffer_size": 512,
+    "ssl": {
+        "cert": "/etc/trojan-go-crt/server.crt",
+        "key": "/etc/trojan-go-crt/server.key",
+        "sni": "",
+        "fallback_port": 80
+    },
+    "router": {
+        "enabled": true,
+        "block": [
+            "geoip:private"
+        ]
+    },
+    "api": {
+        "enabled": true,
+        "api_addr": "0.0.0.0",
+        "api_port": 10000
+    },
+    "log_level": 1,
+    "log_file": "/var/log/trojan/trojan.log"
+}
