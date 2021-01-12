@@ -1,0 +1,13 @@
+name: EZ Tests
+
+on: push
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Setup Script
+        run: ./setup.sh
+      - name: Test Docker Script
+        run: ./install-docker.sh

@@ -1,10 +1,10 @@
-# Trojan Composer
+# SCloudLab Composer
 
-📦 Run trojan with docker
+📦 Wall breaker with docker
 
 ## Getting Started
 
-Update `trojan-go/config.json` with your specific config (including password).
+Update `xray/config.json` with your specific config (including UUID and password).
 
 And Run!
 
