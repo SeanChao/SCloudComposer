@@ -5,6 +5,7 @@
 ## Getting Started
 
 Update `xray/config.json` with your specific config (including UUID and password).
+Update `tg.env` with telegram proxy secret.
 
 And Run!
 

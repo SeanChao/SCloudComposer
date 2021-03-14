@@ -16,3 +16,10 @@ services:
     network_mode: host
     ports:
       - 80:80
+  tg:
+    restart: on-failure
+    image: telegrammessenger/proxy
+    ports:
+      - "2333:443"
+    env_file:
+      - tg.env
