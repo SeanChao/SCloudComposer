@@ -8,6 +8,11 @@ services:
       - "./cert:/etc/cert"
     ports:
       - "443:443"
+      - "444:443"
+      - "445:443"
+      - "446:443"
+      - "447:443"
+      - "4433:443"
   caddy:
     restart: on-failure
     image: "caddy"
