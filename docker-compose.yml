@@ -7,6 +7,7 @@ services:
     volumes:
       - "./xray:/etc/xray"
       - "./cert:/etc/cert"
+      - "./cert_check.sh:/bin/cert_check.sh"
     ports:
       - "443:443"
       - "444:443"
@@ -15,10 +16,11 @@ services:
       - "447:443"
       - "4433:443"
     restart: "unless-stopped"
+    # restart hack
     healthcheck:
-      test: "bash cert_check.sh || exit 1"
-      interval: 10m
-      start_period: 10s
+      test: "kill 1"
+      interval: 24h
+      start_period: 3s
   caddy:
     restart: on-failure
     image: "caddy"
