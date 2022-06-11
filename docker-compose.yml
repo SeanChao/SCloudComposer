@@ -18,7 +18,7 @@ services:
     healthcheck:
       test: "bash cert_check.sh || exit 1"
       interval: 10m
-      start-period: 10s
+      start_period: 10s
   caddy:
     restart: on-failure
     image: "caddy"
