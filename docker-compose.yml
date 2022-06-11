@@ -3,6 +3,7 @@ version: "3"
 services:
   xray:
     image: teddysun/xray
+    restart: on-failure
     volumes:
       - "./xray:/etc/xray"
       - "./cert:/etc/cert"
@@ -23,7 +24,6 @@ services:
     image: "caddy"
     volumes:
       - "./caddy/Caddyfile:/etc/caddy/Caddyfile"
-    network_mode: host
     ports:
       - 80:80
   tg:
