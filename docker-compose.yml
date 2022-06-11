@@ -13,6 +13,11 @@ services:
       - "446:443"
       - "447:443"
       - "4433:443"
+    restart: "unless-stopped"
+    healthcheck:
+      test: "bash cert_check.sh || exit 1"
+      interval: 10m
+      start-period: 10s
   caddy:
     restart: on-failure
     image: "caddy"
@@ -28,3 +33,4 @@ services:
       - "2333:443"
     env_file:
       - tg.env
+
