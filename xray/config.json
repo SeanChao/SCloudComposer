@@ -58,7 +58,7 @@
         ],
         "fallbacks": [
           {
-            "dest": 80 // fallback for anti-detection
+            "dest": "caddy:80" // fallback for anti-detection
           }
         ]
       },

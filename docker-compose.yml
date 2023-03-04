@@ -23,19 +23,13 @@ services:
       - "454:443"
       - "455:443"
       - "4433:443"
-    restart: "unless-stopped"
-    # restart hack
-    healthcheck:
-      test: "kill 1"
-      interval: 24h
-      start_period: 3s
   caddy:
     restart: on-failure
     image: "caddy"
     volumes:
       - "./caddy/Caddyfile:/etc/caddy/Caddyfile"
     ports:
-      - 80:80
+      - "80:80"
   tg:
     restart: on-failure
     image: telegrammessenger/proxy
