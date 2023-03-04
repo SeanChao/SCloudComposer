@@ -18,11 +18,11 @@
         "decryption": "none",
         "fallbacks": [
           {
-            "dest": 1310, // fallback to Trojan
+            "dest": 1310,
             "xver": 1
           },
           {
-            "path": "/websocket", // vless/ws
+            "path": "/websocket",
             "dest": 1234,
             "xver": 1
           }
@@ -58,7 +58,7 @@
         ],
         "fallbacks": [
           {
-            "dest": "caddy:80" // fallback for anti-detection
+            "dest": "caddy:80"
           }
         ]
       },

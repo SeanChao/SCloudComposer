@@ -4,7 +4,8 @@
 
 ## Getting Started
 
-Update `xray/config.json` with your specific config (including UUID and password).
+Update `xray/config.json` with your specific config (including UUID and password).  
+Update `cert.env` with DNS information.  
 Update `tg.env` with telegram proxy secret.
 
 And Run!
