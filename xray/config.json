@@ -4,55 +4,52 @@
   },
   "inbounds": [
     {
-      "port": 443,
+      "port": 2023,
       "protocol": "vless",
       "settings": {
         "clients": [
           {
-            "id": "TODO:",
-            "flow": "xtls-rprx-direct",
-            "level": 0,
-            "email": "love@example.com"
+            "id": "<VLESS_ID>",
+            "flow": "xtls-rprx-vision"
           }
         ],
         "decryption": "none",
         "fallbacks": [
           {
-            "dest": 1310,
-            "xver": 1
-          },
-          {
-            "path": "/websocket",
-            "dest": 1234,
-            "xver": 1
+            "dest": "caddy:80"
           }
         ]
       },
       "streamSettings": {
         "network": "tcp",
-        "security": "xtls",
-        "xtlsSettings": {
-          "alpn": [
-            "http/1.1"
-          ],
+        "security": "tls",
+        "tlsSettings": {
+          "rejectunknownSni": true,
+          "minVersion": "1.2",
           "certificates": [
             {
+              "ocspStapling": 3600,
               "certificateFile": "/etc/cert/fullchain.crt",
               "keyFile": "/etc/cert/private.key"
             }
           ]
         }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
       }
     },
     {
-      "port": 1310,
-      "listen": "127.0.0.1",
+      "port": 2021,
       "protocol": "trojan",
       "settings": {
         "clients": [
           {
-            "password": "TODO:",
-            "level": 0,
+            "password": "<TROJAN_PASSWORD>",
             "email": "love@example.com"
           }
         ],
@@ -64,32 +61,17 @@
       },
       "streamSettings": {
         "network": "tcp",
-        "security": "none",
-        "tcpSettings": {
-          "acceptProxyProtocol": true
-        }
-      }
-    },
-    {
-      "port": 1234,
-      "listen": "127.0.0.1",
-      "protocol": "vless",
-      "settings": {
-        "clients": [
-          {
-            "id": "TODO:",
-            "level": 0,
-            "email": "love@example.com"
-          }
-        ],
-        "decryption": "none"
-      },
-      "streamSettings": {
-        "network": "ws",
-        "security": "none",
-        "wsSettings": {
-          "acceptProxyProtocol": true,
-          "path": "/websocket"
+        "security": "tls",
+        "tlsSettings": {
+          "alpn": [
+            "http/1.1"
+          ],
+          "certificates": [
+            {
+              "certificateFile": "/etc/cert/fullchain.crt",
+              "keyFile": "/etc/cert/private.key"
+            }
+          ]
         }
       }
     }
