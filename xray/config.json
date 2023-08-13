@@ -1,6 +1,6 @@
 {
   "log": {
-    "loglevel": "info"
+    "loglevel": "warn"
   },
   "inbounds": [
     {
@@ -10,31 +10,18 @@
         "clients": [
           {
             "id": "TODO:",
-            "flow": "xtls-rprx-direct",
-            "level": 0,
-            "email": "love@example.com"
+            "flow": "xtls-rprx-vision"
           }
         ],
         "decryption": "none",
         "fallbacks": [
-          {
-            "dest": 1310,
-            "xver": 1
-          },
-          {
-            "path": "/websocket",
-            "dest": 1234,
-            "xver": 1
-          }
+            {"dest": "caddy:80"}
         ]
       },
       "streamSettings": {
         "network": "tcp",
-        "security": "xtls",
-        "xtlsSettings": {
-          "alpn": [
-            "http/1.1"
-          ],
+        "security": "tls",
+        "tlsSettings": {
           "certificates": [
             {
               "certificateFile": "/etc/cert/fullchain.crt",
@@ -42,56 +29,8 @@
             }
           ]
         }
-      }
-    },
-    {
-      "port": 1310,
-      "listen": "127.0.0.1",
-      "protocol": "trojan",
-      "settings": {
-        "clients": [
-          {
-            "password": "TODO:",
-            "level": 0,
-            "email": "love@example.com"
-          }
-        ],
-        "fallbacks": [
-          {
-            "dest": "caddy:80"
-          }
-        ]
       },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "none",
-        "tcpSettings": {
-          "acceptProxyProtocol": true
-        }
-      }
-    },
-    {
-      "port": 1234,
-      "listen": "127.0.0.1",
-      "protocol": "vless",
-      "settings": {
-        "clients": [
-          {
-            "id": "TODO:",
-            "level": 0,
-            "email": "love@example.com"
-          }
-        ],
-        "decryption": "none"
-      },
-      "streamSettings": {
-        "network": "ws",
-        "security": "none",
-        "wsSettings": {
-          "acceptProxyProtocol": true,
-          "path": "/websocket"
-        }
-      }
+      "sniffing": { "enabled": true, "destOverride": [ "http", "tls" ] }
     }
   ],
   "outbounds": [
