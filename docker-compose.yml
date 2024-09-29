@@ -2,7 +2,7 @@ version: "3"
 
 services:
   xray:
-    image: teddysun/xray
+    image: teddysun/xray:1.8.9
     restart: on-failure
     volumes:
       - "./xray:/etc/xray"
