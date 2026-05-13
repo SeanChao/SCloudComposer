@@ -1,2 +1,13 @@
 domain:
 vless_id:
+reality:
+  enabled: false
+  # Run ./setup.sh reality-init to generate and persist these values locally.
+  port: 8443
+  vless_id:
+  private_key:
+  public_key:
+  server_name: "www.microsoft.com"
+  dest: "www.microsoft.com:443"
+  short_id_count: 10
+  short_ids: []

@@ -3,3 +3,5 @@ trojan-crt
 
 cert
 cert.env
+config.yaml
+xray/*.log

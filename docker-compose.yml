@@ -21,6 +21,7 @@ services:
       - "454:443"
       - "455:443"
       - "4433:443"
+      - "8443:8443"
   caddy:
     restart: on-failure
     image: "caddy"
@@ -35,4 +36,3 @@ services:
       - "2333:443"
     env_file:
       - tg.env
-
