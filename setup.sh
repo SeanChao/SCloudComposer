@@ -50,7 +50,9 @@ init_reality_config() {
     fi
 
     if [ -z "$(config_value '.reality.server_name')" ]; then
-        yq -i '.reality.server_name = "www.microsoft.com"' config.yaml
+        # Avoid www.microsoft.com: its Akamai edge fails the REALITY handshake
+        # relay. www.apple.com negotiates TLS 1.3 + X25519 and works reliably.
+        yq -i '.reality.server_name = "www.apple.com"' config.yaml
     fi
 
     if [ -z "$(config_value '.reality.dest')" ]; then
