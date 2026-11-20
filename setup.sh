@@ -238,7 +238,7 @@ start_services() {
 }
 
 # CLI Interface
-case "$1" in
+case "${1:-}" in
     1) install_dependencies ;;
     2) install_docker ;;
     3) apply_configs ;;
