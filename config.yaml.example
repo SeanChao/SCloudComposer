@@ -16,3 +16,11 @@ reality:
   dest: "www.apple.com:443"
   short_id_count: 10
   short_ids: []
+
+# XHTTP transport for the Cloudflare-fronted entry. Run ./setup.sh xhttp-init
+# to generate the path, then copy the CDN block from caddy/Caddyfile.
+xhttp:
+  enabled: false
+  port: 10086
+  vless_id:
+  path:

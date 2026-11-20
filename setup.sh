@@ -91,6 +91,28 @@ init_reality_config() {
     fi
 }
 
+init_xhttp_config() {
+    if [ ! -f config.yaml ]; then
+        echo "config.yaml is missing. Copy config.yaml.example first."
+        exit 1
+    fi
+
+    yq -i '.xhttp.enabled = true' config.yaml
+
+    if [ -z "$(config_value '.xhttp.port')" ]; then
+        yq -i '.xhttp.port = 10086' config.yaml
+    fi
+
+    if [ -z "$(config_value '.xhttp.vless_id')" ]; then
+        yq -i '.xhttp.vless_id = .vless_id' config.yaml
+    fi
+
+    if [ -z "$(config_value '.xhttp.path')" ]; then
+        XHTTP_PATH="/$(openssl rand -hex 12)/"
+        XHTTP_PATH="$XHTTP_PATH" yq -i '.xhttp.path = strenv(XHTTP_PATH)' config.yaml
+    fi
+}
+
 # Function for applying configurations
 apply_configs() {
     echo "Applying configurations..."
@@ -112,6 +134,18 @@ apply_configs() {
     REALITY_DEST=$(config_value '.reality.dest')
     REALITY_SHORT_IDS=$(config_array_json '.reality.short_ids')
 
+    XHTTP_ENABLED=$(config_value '.xhttp.enabled')
+    XHTTP_ENABLED=${XHTTP_ENABLED:-false}
+    XHTTP_PORT=$(config_value '.xhttp.port')
+    XHTTP_PORT=${XHTTP_PORT:-10086}
+    XHTTP_VLESS_ID=$(config_value '.xhttp.vless_id')
+    XHTTP_VLESS_ID=${XHTTP_VLESS_ID:-$VLESS_ID}
+    XHTTP_PATH=$(config_value '.xhttp.path')
+
+    if [ "$XHTTP_ENABLED" = "true" ]; then
+        init_xhttp_config
+    fi
+
     jq \
         --arg vless_id "$VLESS_ID" \
         --arg reality_vless_id "$REALITY_VLESS_ID" \
@@ -121,9 +155,13 @@ apply_configs() {
         --argjson reality_port "$REALITY_PORT" \
         --argjson reality_short_ids "$REALITY_SHORT_IDS" \
         --argjson reality_enabled "$REALITY_ENABLED" \
+        --arg xhttp_vless_id "$XHTTP_VLESS_ID" \
+        --arg xhttp_path "$XHTTP_PATH" \
+        --argjson xhttp_port "$XHTTP_PORT" \
+        --argjson xhttp_enabled "$XHTTP_ENABLED" \
         '
         .inbounds = (
-          [.inbounds[] | select(.tag != "reality-beta")] +
+          [.inbounds[] | select(.tag != "reality-beta" and .tag != "xhttp-cdn")] +
           (
             if $reality_enabled then
               [{
@@ -154,6 +192,33 @@ apply_configs() {
             else
               []
             end
+          ) +
+          (
+            if $xhttp_enabled then
+              [{
+                "listen": "0.0.0.0",
+                "port": $xhttp_port,
+                "tag": "xhttp-cdn",
+                "protocol": "vless",
+                "settings": {
+                  "clients": [{
+                    "id": $xhttp_vless_id,
+                    "email": "xhttp-cdn"
+                  }],
+                  "decryption": "none"
+                },
+                "streamSettings": {
+                  "network": "xhttp",
+                  "security": "none",
+                  "xhttpSettings": {
+                    "path": $xhttp_path,
+                    "mode": "packet-up"
+                  }
+                }
+              }]
+            else
+              []
+            end
           )
         ) |
         .inbounds[0].settings.clients[0].id = $vless_id
@@ -179,6 +244,7 @@ case "$1" in
     3) apply_configs ;;
     4) start_services ;;
     5|reality-init) init_reality_config ;;
+    6|xhttp-init) init_xhttp_config ;;
     all)
         install_dependencies
         install_docker
@@ -192,6 +258,7 @@ case "$1" in
         echo "3: Apply configurations"
         echo "4: Start services and setup maintenance tasks"
         echo "5/reality-init: Generate persisted REALITY keys and shortIds in config.yaml"
+        echo "6/xhttp-init: Generate the persisted XHTTP path in config.yaml"
         echo "all: Run all steps"
         ;;
 esac

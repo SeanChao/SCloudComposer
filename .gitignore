@@ -5,3 +5,4 @@ cert
 cert.env
 config.yaml
 xray/*.log
+cert-cdn/
