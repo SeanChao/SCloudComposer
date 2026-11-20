@@ -21,12 +21,17 @@ services:
       - "454:443"
       - "455:443"
       - "4433:443"
-      - "8443:8443"
+      - "127.0.0.1:10086:10086"
   caddy:
     restart: on-failure
     image: "caddy"
+    network_mode: host
+    environment:
+      - CDN_DOMAIN=${CDN_DOMAIN:-}
+      - CDN_PATH=${CDN_PATH:-}
     volumes:
       - "./caddy/Caddyfile:/etc/caddy/Caddyfile"
+      - "./cert-cdn:/etc/origin:ro"
     ports:
       - "80:80"
   tg:
